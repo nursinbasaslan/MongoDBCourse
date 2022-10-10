@@ -1,0 +1,24 @@
+
+
+use("unionWith");
+db.suppliers.insertMany([
+  { _id: 1, supplier: "Aardvark and Sons", state: "Texas" },
+  { _id: 2, supplier: "Bears Run Amok.", state: "Colorado"},
+  { _id: 3, supplier: "Squid Mark Inc. ", state: "Rhode Island" },
+])
+
+
+use("unionWith");
+db.warehouses.insertMany([
+  { _id: 1, warehouse: "A", region: "West", state: "California" },
+  { _id: 2, warehouse: "B", region: "Central", state: "Colorado"},
+  { _id: 3, warehouse: "C", region: "East", state: "Florida" },
+])
+
+
+use("unionWith");
+db.suppliers.aggregate([
+   { $project: { state: 1, _id: 0 } },
+   { $unionWith: { coll: "warehouses", pipeline: [ { $project: { state: 1, _id: 0 } } ]} }
+])
+
